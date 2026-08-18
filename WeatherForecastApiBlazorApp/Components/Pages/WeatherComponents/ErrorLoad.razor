@@ -1,0 +1,18 @@
+﻿@rendermode InteractiveServer
+
+<div class="alert alert-danger">
+	<h5 class="alert-heading">Ошибка</h5>
+	<p>@ErrorMessage</p>
+	<hr>
+	<button class="btn btn-primary" @onclick="@(() => OnRetry.InvokeAsync())">
+		Повторить запрос
+	</button>
+</div>
+
+@code {
+	[Parameter]
+	public string? ErrorMessage { get; set; } = null;
+
+	[Parameter]
+	public EventCallback OnRetry { get; set; }
+}

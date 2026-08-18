@@ -1,0 +1,54 @@
+﻿@using WeatherForecastApiBlazorApp.Models
+
+<div class="card">
+	<div class="card-body">
+		<!-- Контейнер с ограничением высоты и скроллом -->
+		<div style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
+			<div class="row g-2">
+				@foreach (var hourly in Hours)
+				{
+					<div class="col-12 mb-2">
+						<div class="d-flex justify-content-between align-items-center p-2 border rounded">
+							<!-- Левая часть: время и иконка состояния -->
+							<div>
+								<small>@hourly.Time</small><br>
+								<img src="@hourly.ConditionIcon" alt="@hourly.ConditionText" width="25" height="25">
+							</div>
+
+							<!-- Центральная часть: температура -->
+							<div class="text-center flex-grow-1 mx-3">
+								<Temperature Celsius="@Convert.ToDecimal(hourly.TempC)"
+											 Fahrenheit="@Convert.ToDecimal(hourly.TempF)" />
+							</div>
+
+							<!-- Правая часть: вероятность осадков и ощущается как -->
+							<div class="text-end">
+								<small>Дождь: @hourly.ChanceOfRainPercent%</small><br>
+								<small>
+									Ощ.:
+									<Temperature Celsius="@Convert.ToDecimal(hourly.FeelsLikeC)"
+												 Fahrenheit="@Convert.ToDecimal(hourly.FeelsLikeF)" />
+								</small>
+							</div>
+						</div>
+					</div>
+
+				}
+			</div>
+		</div>
+
+		<!-- Индикатор наличия дополнительных данных -->
+		@if (Hours.Count > 10)
+		{
+			<div class="text-center mt-2 text-muted small">
+				<i class="bi bi-arrow-down-circle"></i>
+				Ещё @(Hours.Count - 10) часов прогноза доступны при прокрутке
+			</div>
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public List<HourlyWeatherQueryResult> Hours { get; set; } = new();
+}

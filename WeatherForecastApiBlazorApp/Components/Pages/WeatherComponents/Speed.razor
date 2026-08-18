@@ -1,0 +1,27 @@
+﻿@inject UnitSettingsService UnitSettings
+@implements IDisposable
+@using WeatherForecastApiBlazorApp.Services
+
+<span class="wind-speed">
+	@FormatSpeed(Kph, Mph)
+</span>
+
+@code {
+	[Parameter]
+	public decimal Kph { get; set; }
+	[Parameter]
+	public decimal Mph { get; set; }
+
+	private string FormatSpeed(decimal kph, decimal mph)
+		=> UnitSettings.UseKph ? $"{kph:0.#} км/ч" : $"{mph:0.#} mph";
+
+	protected override void OnInitialized()
+	{
+		UnitSettings.OnChanged += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		UnitSettings.OnChanged -= StateHasChanged;
+	}
+}

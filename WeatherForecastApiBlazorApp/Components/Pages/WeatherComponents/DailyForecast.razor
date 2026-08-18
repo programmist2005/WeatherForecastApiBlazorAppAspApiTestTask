@@ -1,0 +1,44 @@
+﻿@using WeatherForecastApiBlazorApp.Models
+
+<div class="card">
+	<div class="card-body">
+		<div class="row g-2">
+			@foreach (var daily in Days)
+			{
+				<div class="col-12 mb-2">
+					<div class="d-flex justify-content-between align-items-center p-2 border rounded">
+						<!-- Левая часть: дата и иконка состояния -->
+						<div>
+							<strong>@daily.Date</strong><br>
+							<img src="@daily.ConditionIcon" alt="@daily.ConditionText" width="25" height="25">
+						</div>
+
+						<!-- Центральная часть: температуры (макс./мин.) -->
+						<div class="text-center flex-grow-1 mx-3">
+							<Temperature Celsius="@Convert.ToDecimal(daily.MaxTempC)"
+										 Fahrenheit="@Convert.ToDecimal(daily.MaxTempF)" />
+							/
+							<Temperature Celsius="@Convert.ToDecimal(daily.MinTempC)"
+										 Fahrenheit="@Convert.ToDecimal(daily.MinTempF)" />
+						</div>
+
+						<!-- Правая часть: ветер и вероятность осадков -->
+						<div class="text-end">
+							<small>
+								Ветер:
+								<Speed Kph="@Convert.ToDecimal(daily.MaxWindKph)"
+									   Mph="@Convert.ToDecimal(daily.MaxWindMph)" />
+							</small><br>
+							<small>Дождь: @daily.DailyChanceOfRainPercent%</small>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public List<DailyWeatherQueryResult> Days { get; set; } = new();
+}
