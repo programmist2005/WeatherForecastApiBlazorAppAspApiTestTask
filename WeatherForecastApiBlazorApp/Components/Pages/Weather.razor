@@ -1,6 +1,5 @@
 ﻿@page "/weather"
-@rendermode InteractiveServer
-@attribute [StreamRendering]
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject WeatherService WeatherService
 
 @using WeatherForecastApiBlazorApp.Services
@@ -17,7 +16,7 @@
 }
 else if (errorMessage is not null)
 {
-	<ErrorLoad ErrorMessage="errorMessage" OnRetry="LoadWeatherAsync" />
+	<ErrorLoad ErrorMessage="@errorMessage" OnRetry="LoadWeatherAsync" />
 }
 else if (weather is not null)
 {
