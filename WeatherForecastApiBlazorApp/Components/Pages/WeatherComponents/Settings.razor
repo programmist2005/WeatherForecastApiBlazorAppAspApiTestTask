@@ -1,0 +1,57 @@
+﻿@inject UnitSettingsService UnitSettings
+@using WeatherForecastApiBlazorApp.Services
+
+<!-- Настройки единиц измерения -->
+<div class="card mb-4">
+	<div class="card-header bg-light"
+		 role="button"
+		 data-bs-toggle="collapse"
+		 href="#unitSettings"
+		 aria-expanded="false"
+		 aria-controls="unitSettings">
+		<h6 class="mb-0 d-flex justify-content-between align-items-center">
+			<span>Настройки единиц измерения</span>
+			<span class="badge bg-primary text-white">
+				<i class="bi bi-chevron-right"></i>
+			</span>
+		</h6>
+	</div>
+
+	<div class="collapse" id="unitSettings">
+		<div class="card-body">
+			<!-- Температура -->
+			<div class="mb-3">
+				<label class="fw-bold mb-2">Температура:</label>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="tempC"
+						   checked="@UnitSettings.UseCelsius"
+						   @onchange="() => UnitSettings.SetCelsius(true)" />
+					<label class="form-check-label" for="tempC">°C (Цельсий)</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="tempF"
+						   checked="@(!UnitSettings.UseCelsius)"
+						   @onchange="() => UnitSettings.SetCelsius(false)" />
+					<label class="form-check-label" for="tempF">°F (Фаренгейт)</label>
+				</div>
+			</div>
+
+			<!-- Скорость ветра -->
+			<div>
+				<label class="fw-bold mb-2">Скорость ветра:</label>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="speedKph"
+						   checked="@UnitSettings.UseKph"
+						   @onchange="() => UnitSettings.SetKph(true)" />
+					<label class="form-check-label" for="speedKph">км/ч</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="speedMph"
+						   checked="@(!UnitSettings.UseKph)"
+						   @onchange="() => UnitSettings.SetKph(false)" />
+					<label class="form-check-label" for="speedMph">mph</label>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

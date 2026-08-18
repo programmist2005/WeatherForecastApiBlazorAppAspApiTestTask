@@ -1,64 +1,63 @@
 ﻿@page "/weather"
+@rendermode InteractiveServer
 @attribute [StreamRendering]
+@inject WeatherService WeatherService
 
-<PageTitle>Weather</PageTitle>
+@using WeatherForecastApiBlazorApp.Services
+@using WeatherForecastApiBlazorApp.Models
+@using WeatherForecastApiBlazorApp.Components.Pages.WeatherComponents
 
-<h1>Weather</h1>
+<PageTitle>Погода</PageTitle>
 
-<p>This component demonstrates showing data.</p>
+<Settings />
 
-@if (forecasts == null)
+@if (isLoading)
 {
-    <p><em>Loading...</em></p>
+	<Loader />
 }
-else
+else if (errorMessage is not null)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th aria-label="Temperature in Celsius">Temp. (C)</th>
-                <th aria-label="Temperature in Fahrenheit">Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<ErrorLoad ErrorMessage="errorMessage" OnRetry="LoadWeatherAsync" />
+}
+else if (weather is not null)
+{
+	<WeatherData Weather="weather" />
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+	private bool isLoading = true;
+	private string? errorMessage;
+	private WeatherQueryResult? weather;
+	private bool useCelsius = true;
+	private bool useKph = true;
 
-    protected override async Task OnInitializedAsync()
-    {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadWeatherAsync();
+	}
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
-    }
+	private async Task LoadWeatherAsync()
+	{
+		isLoading = true;
+		errorMessage = null;
+		weather = null;
 
-    private class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }
+		try
+		{
+			//await Task.Delay(500);
+			weather = await WeatherService.GetWeatherAsync();
+		}
+		catch (ApplicationException ex)
+		{
+			errorMessage = ex.Message;
+		}
+		catch (Exception)
+		{
+			errorMessage = "Произошла непредвиденная ошибка";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
 }

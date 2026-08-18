@@ -1,0 +1,70 @@
+﻿@using WeatherForecastApiBlazorApp.Models
+
+<div class="col-md-6">
+	<div class="card mb-4">
+		<div class="card-body">
+			<h2>@Current.City</h2>
+
+			@if (!string.IsNullOrEmpty(Current.Region) || !string.IsNullOrEmpty(Current.Country))
+			{
+				var location = string.Join(", ", new[] { Current.Region, Current.Country }
+					.Where(s => !string.IsNullOrEmpty(s)));
+				<p class="text-muted">@location</p>
+			}
+
+			<!-- Температура -->
+			<p>
+				<strong>Температура:</strong>
+				<Temperature Celsius="@Convert.ToDecimal(Current.TempC)"
+							 Fahrenheit="@Convert.ToDecimal(Current.TempF)" />
+			</p>
+
+			<!-- Ощущается как -->
+			<p>
+				<strong>Ощущается как:</strong>
+				<Temperature Celsius="@Convert.ToDecimal(Current.FeelsLikeC)"
+							 Fahrenheit="@Convert.ToDecimal(Current.FeelsLikeF)" />
+			</p>
+
+			<!-- Ветер -->
+			<p>
+				<strong>Ветер:</strong>
+				<Speed Kph="@Convert.ToDecimal(Current.WindKph)"
+					   Mph="@Convert.ToDecimal(Current.WindMph)" />,
+				направление: @Current.WindDirection (@Current.WindDegree°)
+			</p>
+
+			<!-- Порывы ветра -->
+			<p>
+				<strong>Порывы:</strong>
+				<Speed Kph="@Convert.ToDecimal(Current.GustKph)"
+					   Mph="@Convert.ToDecimal(Current.GustMph)" />
+			</p>
+
+			<!-- Охлаждение ветром -->
+			<p>
+				<strong>Охлаждение ветром:</strong>
+				<Temperature Celsius="@Convert.ToDecimal(Current.WindchillC)"
+							 Fahrenheit="@Convert.ToDecimal(Current.WindchillF)" />
+			</p>
+
+			<!-- Влажность -->
+			<p><strong>Влажность:</strong> @Current.HumidityPercent%</p>
+
+			<!-- Облачность -->
+			<p><strong>Облачность:</strong> @Current.CloudPercent%</p>
+
+			<!-- УФ‑индекс -->
+			<p><strong>УФ‑индекс:</strong> @Current.Uv</p>
+
+
+			<!-- Состояние -->
+			<p><strong>Состояние:</strong> @Current.ConditionText</p>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter, EditorRequired]
+	public CurrentWeatherQueryResult Current { get; set; } = null!;
+}
