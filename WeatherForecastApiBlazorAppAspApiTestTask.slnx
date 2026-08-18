@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="WeatherForecastApi.Application/WeatherForecastApi.Application.csproj" />
+  <Project Path="WeatherForecastApi.Domain/WeatherForecastApi.Domain.csproj" />
+  <Project Path="WeatherForecastApi.Infrastructure/WeatherForecastApi.Infrastructure.csproj" />
+  <Project Path="WeatherForecastApiAspApi/WeatherForecastApiAspApi.csproj" Id="943bf28c-b6b6-41a7-abe8-639c1898cf78" />
   <Project Path="WeatherForecastApiBlazorApp/WeatherForecastApiBlazorApp.csproj" />
 </Solution>
